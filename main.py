@@ -58,6 +58,16 @@ def print_board():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 crashed = True
+            if event.type == pg.MOUSEBUTTONDOWN and QUEEN_WHITE.is_selected() is False:
+                x, y = event.pos
+                if QUEEN_WHITE_RECT[0] < x < QUEEN_WHITE_RECT[2] and QUEEN_WHITE_RECT[1] < y < QUEEN_WHITE_RECT[3]:
+                    QUEEN_WHITE.select()
+            elif event.type == pg.MOUSEBUTTONDOWN and QUEEN_WHITE.is_selected() is True:
+                x, y = event.pos
+                QUEEN_WHITE.set_position(x-15, y-15)
+                QUEEN_WHITE.unselect()
+            else:
+                pass
 
         gameDisplay.fill((60, 70, 90))
         gameDisplay.blit(background, (0, 0))
@@ -86,6 +96,8 @@ def print_board():
         for i in range(8):
             gameDisplay.blit(PAWN_BLACK[i].get_image(), PAWN_BLACK[i].get_position())
             gameDisplay.blit(PAWN_WHITE[i].get_image(), PAWN_WHITE[i].get_position())
+
+        QUEEN_WHITE_RECT = QUEEN_WHITE._get_rect()
 
         pg.display.update()
         clock.tick(60)

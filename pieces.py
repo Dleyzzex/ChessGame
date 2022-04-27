@@ -5,8 +5,9 @@ import pygame.image
 class Pieces:
     def __init__(self, chess_color, x, y):
         self._chess_color = chess_color
-        self._image = pygame.Surface((25, 25))
+        self._image = pygame.Surface((50, 50))
         self._position = (x, y)
+        self._selected = False
 
     def get_color(self):
         return self._chess_color
@@ -17,8 +18,26 @@ class Pieces:
     def get_image(self):
         return self._image
 
+    def _get_rect(self):
+        x1, y1 = self.get_position()
+        x2 = x1 + 50
+        y2 = y1 + 50
+        return (x1, y1, x2, y2)
+
     def get_position(self):
         return self._position
+
+    def set_position(self, x, y):
+        self._position = (x, y)
+
+    def select(self):
+        self._selected = True
+
+    def unselect(self):
+        self._selected = False
+
+    def is_selected(self):
+        return self._selected
 
 
 class Pawn(Pieces):
