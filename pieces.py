@@ -33,7 +33,8 @@ class Pieces:
     def select(self):
         self._selected = True
 
-    def unselect(self):
+    def unselect(self, x, y):
+        self.set_position(x-15, y-15)
         self._selected = False
 
     def is_selected(self):

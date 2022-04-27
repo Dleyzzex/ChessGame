@@ -3,108 +3,224 @@ import pygame as pg
 import pieces
 
 
-def print_board():
-    pg.init()
+class ChessGame:
+    def __init__(self):
+        pg.init()
+        self.display_width = 608
+        self.display_height = 608
+        self.piece_selected = False
+        self.gameDisplay = pg.display.set_mode((self.display_width, self.display_height))
+        self.image_size = 50
+        self.tile_size = 76
+        self.brown = (149, 69, 53)
+        self.beige = (254, 243, 206)
 
-    display_width = 608
-    display_height = 608
-    image_size = 50
+        self.QUEEN_BLACK = pieces.Queen("black", ((self.display_width / 8) * 3 + (self.tile_size - self.image_size) / 2),
+                                        (self.tile_size - self.image_size) / 2)
+        self.QUEEN_WHITE = pieces.Queen("white", ((self.display_width / 8) * 3 + (self.tile_size - self.image_size) / 2),
+                                        ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+        self.KING_BLACK = pieces.King("black", ((self.display_width / 8) * 4 + (self.tile_size - self.image_size) / 2),
+                                        (self.tile_size - self.image_size) / 2)
+        self.KING_WHITE = pieces.King("white", ((self.display_width / 8) * 4 + (self.tile_size - self.image_size) / 2),
+                                        ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
 
-    brown = (149, 69, 53)
-    beige = (254, 243, 206)
-    gameDisplay = pg.display.set_mode((display_width, display_height))
-    pg.display.set_caption('Chess Game')
+        self.ROOK_BLACK_1 = pieces.Rook("black", ((self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+        self.ROOK_WHITE_1 = pieces.Rook("white", ((self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+        self.ROOK_BLACK_2 = pieces.Rook("black", ((self.display_width / 8) * 7 + (
+                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+        self.ROOK_WHITE_2 = pieces.Rook("white", ((self.display_width / 8) * 7 + (
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
 
-    colors = itertools.cycle((beige, brown))
-    tile_size = 76
-    width, height = 8 * tile_size, 8 * tile_size
-    background = pg.Surface((width, height))
+        self.KNIGHT_BLACK_1 = pieces.Knight("black", ((self.display_width / 8) + (
+                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+        self.KNIGHT_WHITE_1 = pieces.Knight("white", ((self.display_width / 8) + (
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+        self.KNIGHT_BLACK_2 = pieces.Knight("black", ((self.display_width / 8) * 6 + (
+                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+        self.KNIGHT_WHITE_2 = pieces.Knight("white", ((self.display_width / 8) * 6 + (
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
 
-    QUEEN_BLACK = pieces.Queen("black", ((display_width / 8) * 3 + (tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    QUEEN_WHITE = pieces.Queen("white", ((display_width / 8) * 3 + (tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
-    KING_BLACK = pieces.King("black", ((display_width / 8) * 4 + (tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    KING_WHITE = pieces.King("white", ((display_width / 8) * 4 + (tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
+        self.BISHOP_BLACK_1 = pieces.Bishop("black", ((self.display_width / 8) * 2 + (
+                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+        self.BISHOP_WHITE_1 = pieces.Bishop("white", ((self.display_width / 8) * 2 + (
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+        self.BISHOP_BLACK_2 = pieces.Bishop("black", ((self.display_width / 8) * 5 + (
+                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+        self.BISHOP_WHITE_2 = pieces.Bishop("white", ((self.display_width / 8) * 5 + (
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
 
-    ROOK_BLACK_1 = pieces.Rook("black", ((tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    ROOK_WHITE_1 = pieces.Rook("white", ((tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
-    ROOK_BLACK_2 = pieces.Rook("black", ((display_width / 8) * 7 + (tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    ROOK_WHITE_2 = pieces.Rook("white", ((display_width / 8) * 7 + (tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
+        self.PAWN_BLACK, self.PAWN_WHITE = [], []
+        for i in range(8):
+            self.PAWN_BLACK.append(pieces.Pawn("black", ((self.display_width / 8) * i + (
+                        self.tile_size - self.image_size) / 2), (self.display_height / 8) + (
+                                                      self.tile_size - self.image_size) / 2))
+            self.PAWN_WHITE.append(pieces.Pawn("white", ((self.display_width / 8) * i + (
+                        self.tile_size - self.image_size) / 2), (self.display_height / 8) * 6 + (
+                                                      self.tile_size - 50) / 2))
 
-    KNIGHT_BLACK_1 = pieces.Knight("black", ((display_width / 8) + (tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    KNIGHT_WHITE_1 = pieces.Knight("white", ((display_width / 8) + (tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
-    KNIGHT_BLACK_2 = pieces.Knight("black", ((display_width / 8) * 6 + (tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    KNIGHT_WHITE_2 = pieces.Knight("white", ((display_width / 8) * 6 + (tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
+    def catch_pieces(self, x, y):
+        QUEEN_WHITE_RECT, QUEEN_BLACK_RECT = self.QUEEN_WHITE._get_rect(), self.QUEEN_BLACK._get_rect()
+        KING_WHITE_RECT, KING_BLACK_RECT = self.KING_WHITE._get_rect(), self.KING_BLACK._get_rect()
+        ROOK1_WHITE_RECT, ROOK2_WHITE_RECT, ROOK1_BLACK_RECT, ROOK2_BLACK_RECT = self.ROOK_WHITE_1._get_rect(), \
+                    self.ROOK_WHITE_2._get_rect(), self.ROOK_BLACK_1._get_rect(), self.ROOK_BLACK_2._get_rect()
+        KNIGHT1_WHITE_RECT, KNIGHT2_WHITE_RECT, KNIGHT1_BLACK_RECT, KNIGHT2_BLACK_RECT = self.KNIGHT_WHITE_1._get_rect(), \
+                    self.KNIGHT_WHITE_2._get_rect(), self.KNIGHT_BLACK_1._get_rect(), self.KNIGHT_BLACK_2._get_rect()
+        BISHOP1_WHITE_RECT, BISHOP2_WHITE_RECT, BISHOP1_BLACK_RECT, BISHOP2_BLACK_RECT = self.BISHOP_WHITE_1._get_rect(), \
+                    self.BISHOP_WHITE_2._get_rect(), self.BISHOP_BLACK_1._get_rect(), self.BISHOP_BLACK_2._get_rect()
+        move = True
 
-    BISHOP_BLACK_1 = pieces.Bishop("black", ((display_width / 8) * 2 + (tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    BISHOP_WHITE_1 = pieces.Bishop("white", ((display_width / 8) * 2 + (tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
-    BISHOP_BLACK_2 = pieces.Bishop("black", ((display_width / 8) * 5 + (tile_size - image_size) / 2), (tile_size - image_size) / 2)
-    BISHOP_WHITE_2 = pieces.Bishop("white", ((display_width / 8) * 5 + (tile_size - image_size) / 2), ((display_height / 8) * 7 + (tile_size-50) / 2))
+        if QUEEN_WHITE_RECT[0] < x < QUEEN_WHITE_RECT[2] and QUEEN_WHITE_RECT[1] < y < QUEEN_WHITE_RECT[3]:
+            self.QUEEN_WHITE.select()
+        elif QUEEN_BLACK_RECT[0] < x < QUEEN_BLACK_RECT[2] and QUEEN_BLACK_RECT[1] < y < QUEEN_BLACK_RECT[3]:
+            self.QUEEN_BLACK.select()
+        elif KING_WHITE_RECT[0] < x < KING_WHITE_RECT[2] and KING_WHITE_RECT[1] < y < KING_WHITE_RECT[3]:
+            self.KING_WHITE.select()
+        elif KING_BLACK_RECT[0] < x < KING_BLACK_RECT[2] and KING_BLACK_RECT[1] < y < KING_BLACK_RECT[3]:
+            self.KING_BLACK.select()
+        elif ROOK1_WHITE_RECT[0] < x < ROOK1_WHITE_RECT[2] and ROOK1_WHITE_RECT[1] < y < ROOK1_WHITE_RECT[3]:
+            self.ROOK_WHITE_1.select()
+        elif ROOK2_WHITE_RECT[0] < x < ROOK2_WHITE_RECT[2] and ROOK2_WHITE_RECT[1] < y < ROOK2_WHITE_RECT[3]:
+            self.ROOK_WHITE_2.select()
+        elif ROOK1_BLACK_RECT[0] < x < ROOK1_BLACK_RECT[2] and ROOK1_BLACK_RECT[1] < y < ROOK1_BLACK_RECT[3]:
+            self.ROOK_BLACK_1.select()
+        elif ROOK2_BLACK_RECT[0] < x < ROOK2_BLACK_RECT[2] and ROOK2_BLACK_RECT[1] < y < ROOK2_BLACK_RECT[3]:
+            self.ROOK_BLACK_2.select()
+        elif KNIGHT1_WHITE_RECT[0] < x < KNIGHT1_WHITE_RECT[2] and KNIGHT1_WHITE_RECT[1] < y < KNIGHT1_WHITE_RECT[3]:
+            self.KNIGHT_WHITE_1.select()
+        elif KNIGHT2_WHITE_RECT[0] < x < KNIGHT2_WHITE_RECT[2] and KNIGHT2_WHITE_RECT[1] < y < KNIGHT2_WHITE_RECT[3]:
+            self.KNIGHT_WHITE_2.select()
+        elif KNIGHT1_BLACK_RECT[0] < x < KNIGHT1_BLACK_RECT[2] and KNIGHT1_BLACK_RECT[1] < y < KNIGHT1_BLACK_RECT[3]:
+            self.KNIGHT_BLACK_1.select()
+        elif KNIGHT2_BLACK_RECT[0] < x < KNIGHT2_BLACK_RECT[2] and KNIGHT2_BLACK_RECT[1] < y < KNIGHT2_BLACK_RECT[3]:
+            self.KNIGHT_BLACK_2.select()
+        elif BISHOP1_WHITE_RECT[0] < x < BISHOP1_WHITE_RECT[2] and BISHOP1_WHITE_RECT[1] < y < BISHOP1_WHITE_RECT[3]:
+            self.BISHOP_WHITE_1.select()
+        elif BISHOP2_WHITE_RECT[0] < x < BISHOP2_WHITE_RECT[2] and BISHOP2_WHITE_RECT[1] < y < BISHOP2_WHITE_RECT[3]:
+            self.BISHOP_WHITE_2.select()
+        elif BISHOP1_BLACK_RECT[0] < x < BISHOP1_BLACK_RECT[2] and BISHOP1_BLACK_RECT[1] < y < BISHOP1_BLACK_RECT[3]:
+            self.BISHOP_BLACK_1.select()
+        elif BISHOP2_BLACK_RECT[0] < x < BISHOP2_BLACK_RECT[2] and BISHOP2_BLACK_RECT[1] < y < BISHOP2_BLACK_RECT[3]:
+            self.BISHOP_BLACK_2.select()
+        else:
+            move = False
+        if move is True:
+            self.piece_selected = True
 
-    PAWN_BLACK, PAWN_WHITE = [], []
-    for i in range(8):
-        PAWN_BLACK.append(pieces.Pawn("black", ((display_width / 8) * i + (tile_size - image_size) / 2), (display_height / 8) + (tile_size - image_size) / 2))
-        PAWN_WHITE.append(pieces.Pawn("white", ((display_width / 8) * i + (tile_size - image_size) / 2), (display_height / 8) * 6 + (tile_size-50) / 2))
+    def put_pieces(self, x, y):
+        move = True
 
-    for y in range(0, height, tile_size):
-        for x in range(0, width, tile_size):
-            rect = (x, y, tile_size, tile_size)
-            pg.draw.rect(background, next(colors), rect)
-        next(colors)
+        if self.QUEEN_WHITE.is_selected() is True:
+            self.QUEEN_WHITE.unselect(x, y)
+        elif self.QUEEN_BLACK.is_selected() is True:
+            self.QUEEN_BLACK.unselect(x, y)
+        elif self.KING_WHITE.is_selected() is True:
+            self.KING_WHITE.unselect(x, y)
+        elif self.KING_BLACK.is_selected() is True:
+            self.KING_BLACK.unselect(x, y)
+        elif self.ROOK_WHITE_1.is_selected() is True:
+            self.ROOK_WHITE_1.unselect(x, y)
+        elif self.ROOK_WHITE_2.is_selected() is True:
+            self.ROOK_WHITE_2.unselect(x, y)
+        elif self.ROOK_BLACK_1.is_selected() is True:
+            self.ROOK_BLACK_1.unselect(x, y)
+        elif self.ROOK_BLACK_2.is_selected() is True:
+            self.ROOK_BLACK_2.unselect(x, y)
+        elif self.KNIGHT_WHITE_1.is_selected() is True:
+            self.KNIGHT_WHITE_1.unselect(x, y)
+        elif self.KNIGHT_WHITE_2.is_selected() is True:
+            self.KNIGHT_WHITE_2.unselect(x, y)
+        elif self.KNIGHT_BLACK_1.is_selected() is True:
+            self.KNIGHT_BLACK_1.unselect(x, y)
+        elif self.KNIGHT_BLACK_2.is_selected() is True:
+            self.KNIGHT_BLACK_2.unselect(x, y)
+        elif self.BISHOP_WHITE_1.is_selected() is True:
+            self.BISHOP_WHITE_1.unselect(x, y)
+        elif self.BISHOP_WHITE_2.is_selected() is True:
+            self.BISHOP_WHITE_2.unselect(x, y)
+        elif self.BISHOP_BLACK_1.is_selected() is True:
+            self.BISHOP_BLACK_1.unselect(x, y)
+        elif self.BISHOP_BLACK_2.is_selected() is True:
+            self.BISHOP_BLACK_2.unselect(x, y)
+        else:
+            move = False
+        if move is True:
+            self.piece_selected = False
 
-    clock = pg.time.Clock()
-    crashed = False
 
-    while not crashed:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                crashed = True
-            if event.type == pg.MOUSEBUTTONDOWN and QUEEN_WHITE.is_selected() is False:
-                x, y = event.pos
-                if QUEEN_WHITE_RECT[0] < x < QUEEN_WHITE_RECT[2] and QUEEN_WHITE_RECT[1] < y < QUEEN_WHITE_RECT[3]:
-                    QUEEN_WHITE.select()
-            elif event.type == pg.MOUSEBUTTONDOWN and QUEEN_WHITE.is_selected() is True:
-                x, y = event.pos
-                QUEEN_WHITE.set_position(x-15, y-15)
-                QUEEN_WHITE.unselect()
-            else:
-                pass
-
-        gameDisplay.fill((60, 70, 90))
-        gameDisplay.blit(background, (0, 0))
-
+    def display_pieces(self):
         # Display pieces
-        gameDisplay.blit(QUEEN_BLACK.get_image(), QUEEN_BLACK.get_position())
-        gameDisplay.blit(QUEEN_WHITE.get_image(), QUEEN_WHITE.get_position())
-        gameDisplay.blit(KING_BLACK.get_image(), KING_BLACK.get_position())
-        gameDisplay.blit(KING_WHITE.get_image(), KING_WHITE.get_position())
+        self.gameDisplay.blit(self.QUEEN_BLACK.get_image(), self.QUEEN_BLACK.get_position())
+        self.gameDisplay.blit(self.QUEEN_WHITE.get_image(), self.QUEEN_WHITE.get_position())
+        self.gameDisplay.blit(self.KING_BLACK.get_image(), self.KING_BLACK.get_position())
+        self.gameDisplay.blit(self.KING_WHITE.get_image(), self.KING_WHITE.get_position())
 
-        gameDisplay.blit(ROOK_BLACK_1.get_image(), ROOK_BLACK_1.get_position())
-        gameDisplay.blit(ROOK_BLACK_2.get_image(), ROOK_BLACK_2.get_position())
-        gameDisplay.blit(ROOK_WHITE_1.get_image(), ROOK_WHITE_1.get_position())
-        gameDisplay.blit(ROOK_WHITE_2.get_image(), ROOK_WHITE_2.get_position())
+        self.gameDisplay.blit(self.ROOK_BLACK_1.get_image(), self.ROOK_BLACK_1.get_position())
+        self.gameDisplay.blit(self.ROOK_BLACK_2.get_image(), self.ROOK_BLACK_2.get_position())
+        self.gameDisplay.blit(self.ROOK_WHITE_1.get_image(), self.ROOK_WHITE_1.get_position())
+        self.gameDisplay.blit(self.ROOK_WHITE_2.get_image(), self.ROOK_WHITE_2.get_position())
 
-        gameDisplay.blit(KNIGHT_BLACK_1.get_image(), KNIGHT_BLACK_1.get_position())
-        gameDisplay.blit(KNIGHT_BLACK_2.get_image(), KNIGHT_BLACK_2.get_position())
-        gameDisplay.blit(KNIGHT_WHITE_1.get_image(), KNIGHT_WHITE_1.get_position())
-        gameDisplay.blit(KNIGHT_WHITE_2.get_image(), KNIGHT_WHITE_2.get_position())
+        self.gameDisplay.blit(self.KNIGHT_BLACK_1.get_image(), self.KNIGHT_BLACK_1.get_position())
+        self.gameDisplay.blit(self.KNIGHT_BLACK_2.get_image(), self.KNIGHT_BLACK_2.get_position())
+        self.gameDisplay.blit(self.KNIGHT_WHITE_1.get_image(), self.KNIGHT_WHITE_1.get_position())
+        self.gameDisplay.blit(self.KNIGHT_WHITE_2.get_image(), self.KNIGHT_WHITE_2.get_position())
 
-        gameDisplay.blit(BISHOP_BLACK_1.get_image(), BISHOP_BLACK_1.get_position())
-        gameDisplay.blit(BISHOP_BLACK_2.get_image(), BISHOP_BLACK_2.get_position())
-        gameDisplay.blit(BISHOP_WHITE_1.get_image(), BISHOP_WHITE_1.get_position())
-        gameDisplay.blit(BISHOP_WHITE_2.get_image(), BISHOP_WHITE_2.get_position())
+        self.gameDisplay.blit(self.BISHOP_BLACK_1.get_image(), self.BISHOP_BLACK_1.get_position())
+        self.gameDisplay.blit(self.BISHOP_BLACK_2.get_image(), self.BISHOP_BLACK_2.get_position())
+        self.gameDisplay.blit(self.BISHOP_WHITE_1.get_image(), self.BISHOP_WHITE_1.get_position())
+        self.gameDisplay.blit(self.BISHOP_WHITE_2.get_image(), self.BISHOP_WHITE_2.get_position())
 
         for i in range(8):
-            gameDisplay.blit(PAWN_BLACK[i].get_image(), PAWN_BLACK[i].get_position())
-            gameDisplay.blit(PAWN_WHITE[i].get_image(), PAWN_WHITE[i].get_position())
+            self.gameDisplay.blit(self.PAWN_BLACK[i].get_image(), self.PAWN_BLACK[i].get_position())
+            self.gameDisplay.blit(self.PAWN_WHITE[i].get_image(), self.PAWN_WHITE[i].get_position())
 
-        QUEEN_WHITE_RECT = QUEEN_WHITE._get_rect()
+    def print_board(self):
 
-        pg.display.update()
-        clock.tick(60)
+        pg.display.set_caption('Chess Game')
 
-    pg.quit()
-    quit()
+        colors = itertools.cycle((self.beige, self.brown))
 
+        width, height = 8 * self.tile_size, 8 * self.tile_size
+        background = pg.Surface((width, height))
+
+
+        for y in range(0, height, self.tile_size):
+            for x in range(0, width, self.tile_size):
+                rect = (x, y, self.tile_size, self.tile_size)
+                pg.draw.rect(background, next(colors), rect)
+            next(colors)
+
+        clock = pg.time.Clock()
+        crashed = False
+
+        QUEEN_WHITE_RECT = self.QUEEN_WHITE._get_rect()
+
+        while not crashed:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    crashed = True
+                if event.type == pg.MOUSEBUTTONDOWN and self.piece_selected is False:
+                    x, y = event.pos
+                    self.catch_pieces(x, y)
+                elif event.type == pg.MOUSEBUTTONDOWN and self.piece_selected is True:
+                    x, y = event.pos
+                    self.put_pieces(x, y)
+                else:
+                    pass
+
+            self.gameDisplay.fill((60, 70, 90))
+            self.gameDisplay.blit(background, (0, 0))
+
+            self.display_pieces()
+
+            pg.display.update()
+            clock.tick(60)
+
+        pg.quit()
+        quit()
+
+def main():
+    my_chess = ChessGame()
+    my_chess.print_board()
 
 if __name__ == '__main__':
-    print_board()
+    main()
