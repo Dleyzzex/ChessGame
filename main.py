@@ -60,59 +60,49 @@ class ChessGame:
                                                       self.tile_size - 50) / 2))
 
     def catch_pieces(self, x, y):
-        QUEEN_WHITE_RECT, QUEEN_BLACK_RECT = self.QUEEN_WHITE._get_rect(), self.QUEEN_BLACK._get_rect()
-        KING_WHITE_RECT, KING_BLACK_RECT = self.KING_WHITE._get_rect(), self.KING_BLACK._get_rect()
-        ROOK1_WHITE_RECT, ROOK2_WHITE_RECT, ROOK1_BLACK_RECT, ROOK2_BLACK_RECT = self.ROOK_WHITE_1._get_rect(), \
-                    self.ROOK_WHITE_2._get_rect(), self.ROOK_BLACK_1._get_rect(), self.ROOK_BLACK_2._get_rect()
-        KNIGHT1_WHITE_RECT, KNIGHT2_WHITE_RECT, KNIGHT1_BLACK_RECT, KNIGHT2_BLACK_RECT = self.KNIGHT_WHITE_1._get_rect(), \
-                    self.KNIGHT_WHITE_2._get_rect(), self.KNIGHT_BLACK_1._get_rect(), self.KNIGHT_BLACK_2._get_rect()
-        BISHOP1_WHITE_RECT, BISHOP2_WHITE_RECT, BISHOP1_BLACK_RECT, BISHOP2_BLACK_RECT = self.BISHOP_WHITE_1._get_rect(), \
-                    self.BISHOP_WHITE_2._get_rect(), self.BISHOP_BLACK_1._get_rect(), self.BISHOP_BLACK_2._get_rect()
-        PAWN_WHITE_RECT = [data._get_rect() for data in self.PAWN_WHITE]
-        PAWN_BLACK_RECT = [data._get_rect() for data in self.PAWN_BLACK]
         move = True
 
-        if QUEEN_WHITE_RECT[0] < x < QUEEN_WHITE_RECT[2] and QUEEN_WHITE_RECT[1] < y < QUEEN_WHITE_RECT[3]:
+        if self.QUEEN_WHITE._get_rect().collidepoint(x, y):
             self.QUEEN_WHITE.select()
-        elif QUEEN_BLACK_RECT[0] < x < QUEEN_BLACK_RECT[2] and QUEEN_BLACK_RECT[1] < y < QUEEN_BLACK_RECT[3]:
+        elif self.QUEEN_BLACK._get_rect().collidepoint(x, y):
             self.QUEEN_BLACK.select()
-        elif KING_WHITE_RECT[0] < x < KING_WHITE_RECT[2] and KING_WHITE_RECT[1] < y < KING_WHITE_RECT[3]:
+        elif self.KING_WHITE._get_rect().collidepoint(x, y):
             self.KING_WHITE.select()
-        elif KING_BLACK_RECT[0] < x < KING_BLACK_RECT[2] and KING_BLACK_RECT[1] < y < KING_BLACK_RECT[3]:
+        elif self.KING_BLACK._get_rect().collidepoint(x, y):
             self.KING_BLACK.select()
-        elif ROOK1_WHITE_RECT[0] < x < ROOK1_WHITE_RECT[2] and ROOK1_WHITE_RECT[1] < y < ROOK1_WHITE_RECT[3]:
+        elif self.ROOK_WHITE_1._get_rect().collidepoint(x, y):
             self.ROOK_WHITE_1.select()
-        elif ROOK2_WHITE_RECT[0] < x < ROOK2_WHITE_RECT[2] and ROOK2_WHITE_RECT[1] < y < ROOK2_WHITE_RECT[3]:
+        elif self.ROOK_WHITE_2._get_rect().collidepoint(x, y):
             self.ROOK_WHITE_2.select()
-        elif ROOK1_BLACK_RECT[0] < x < ROOK1_BLACK_RECT[2] and ROOK1_BLACK_RECT[1] < y < ROOK1_BLACK_RECT[3]:
+        elif self.ROOK_BLACK_1._get_rect().collidepoint(x, y):
             self.ROOK_BLACK_1.select()
-        elif ROOK2_BLACK_RECT[0] < x < ROOK2_BLACK_RECT[2] and ROOK2_BLACK_RECT[1] < y < ROOK2_BLACK_RECT[3]:
+        elif self.ROOK_BLACK_2._get_rect().collidepoint(x, y):
             self.ROOK_BLACK_2.select()
-        elif KNIGHT1_WHITE_RECT[0] < x < KNIGHT1_WHITE_RECT[2] and KNIGHT1_WHITE_RECT[1] < y < KNIGHT1_WHITE_RECT[3]:
+        elif self.KNIGHT_WHITE_1._get_rect().collidepoint(x, y):
             self.KNIGHT_WHITE_1.select()
-        elif KNIGHT2_WHITE_RECT[0] < x < KNIGHT2_WHITE_RECT[2] and KNIGHT2_WHITE_RECT[1] < y < KNIGHT2_WHITE_RECT[3]:
+        elif self.KNIGHT_WHITE_2._get_rect().collidepoint(x, y):
             self.KNIGHT_WHITE_2.select()
-        elif KNIGHT1_BLACK_RECT[0] < x < KNIGHT1_BLACK_RECT[2] and KNIGHT1_BLACK_RECT[1] < y < KNIGHT1_BLACK_RECT[3]:
+        elif self.KNIGHT_BLACK_1._get_rect().collidepoint(x, y):
             self.KNIGHT_BLACK_1.select()
-        elif KNIGHT2_BLACK_RECT[0] < x < KNIGHT2_BLACK_RECT[2] and KNIGHT2_BLACK_RECT[1] < y < KNIGHT2_BLACK_RECT[3]:
+        elif self.KNIGHT_BLACK_2._get_rect().collidepoint(x, y):
             self.KNIGHT_BLACK_2.select()
-        elif BISHOP1_WHITE_RECT[0] < x < BISHOP1_WHITE_RECT[2] and BISHOP1_WHITE_RECT[1] < y < BISHOP1_WHITE_RECT[3]:
+        elif self.BISHOP_WHITE_1._get_rect().collidepoint(x, y):
             self.BISHOP_WHITE_1.select()
-        elif BISHOP2_WHITE_RECT[0] < x < BISHOP2_WHITE_RECT[2] and BISHOP2_WHITE_RECT[1] < y < BISHOP2_WHITE_RECT[3]:
+        elif self.BISHOP_WHITE_2._get_rect().collidepoint(x, y):
             self.BISHOP_WHITE_2.select()
-        elif BISHOP1_BLACK_RECT[0] < x < BISHOP1_BLACK_RECT[2] and BISHOP1_BLACK_RECT[1] < y < BISHOP1_BLACK_RECT[3]:
+        elif self.BISHOP_BLACK_1._get_rect().collidepoint(x, y):
             self.BISHOP_BLACK_1.select()
-        elif BISHOP2_BLACK_RECT[0] < x < BISHOP2_BLACK_RECT[2] and BISHOP2_BLACK_RECT[1] < y < BISHOP2_BLACK_RECT[3]:
+        elif self.BISHOP_BLACK_2._get_rect().collidepoint(x, y):
             self.BISHOP_BLACK_2.select()
         else:
             counter = 0
             check = False
-            for data_white, data_black in zip(PAWN_WHITE_RECT, PAWN_BLACK_RECT):
-                if data_white[0] < x < data_white[2] and data_white[1] < y < data_white[3]:
+            for data_white, data_black in zip(self.PAWN_WHITE, self.PAWN_BLACK):
+                if data_white._get_rect().collidepoint(x, y):
                     self.PAWN_WHITE[counter].select()
                     check = True
                     break
-                elif data_black[0] < x < data_black[2] and data_black[1] < y < data_black[3]:
+                elif data_black._get_rect().collidepoint(x, y):
                     self.PAWN_BLACK[counter].select()
                     check = True
                     break
@@ -129,46 +119,64 @@ class ChessGame:
         move = True
 
         if self.QUEEN_WHITE.is_selected() is True:
+            self.check_eating(x, y)
             self.QUEEN_WHITE.unselect(x, y)
         elif self.QUEEN_BLACK.is_selected() is True:
+            self.check_eating(x, y)
             self.QUEEN_BLACK.unselect(x, y)
         elif self.KING_WHITE.is_selected() is True:
+            self.check_eating(x, y)
             self.KING_WHITE.unselect(x, y)
         elif self.KING_BLACK.is_selected() is True:
+            self.check_eating(x, y)
             self.KING_BLACK.unselect(x, y)
         elif self.ROOK_WHITE_1.is_selected() is True:
+            self.check_eating(x, y)
             self.ROOK_WHITE_1.unselect(x, y)
         elif self.ROOK_WHITE_2.is_selected() is True:
+            self.check_eating(x, y)
             self.ROOK_WHITE_2.unselect(x, y)
         elif self.ROOK_BLACK_1.is_selected() is True:
+            self.check_eating(x, y)
             self.ROOK_BLACK_1.unselect(x, y)
         elif self.ROOK_BLACK_2.is_selected() is True:
+            self.check_eating(x, y)
             self.ROOK_BLACK_2.unselect(x, y)
         elif self.KNIGHT_WHITE_1.is_selected() is True:
+            self.check_eating(x, y)
             self.KNIGHT_WHITE_1.unselect(x, y)
         elif self.KNIGHT_WHITE_2.is_selected() is True:
+            self.check_eating(x, y)
             self.KNIGHT_WHITE_2.unselect(x, y)
         elif self.KNIGHT_BLACK_1.is_selected() is True:
+            self.check_eating(x, y)
             self.KNIGHT_BLACK_1.unselect(x, y)
         elif self.KNIGHT_BLACK_2.is_selected() is True:
+            self.check_eating(x, y)
             self.KNIGHT_BLACK_2.unselect(x, y)
         elif self.BISHOP_WHITE_1.is_selected() is True:
+            self.check_eating(x, y)
             self.BISHOP_WHITE_1.unselect(x, y)
         elif self.BISHOP_WHITE_2.is_selected() is True:
+            self.check_eating(x, y)
             self.BISHOP_WHITE_2.unselect(x, y)
         elif self.BISHOP_BLACK_1.is_selected() is True:
+            self.check_eating(x, y)
             self.BISHOP_BLACK_1.unselect(x, y)
         elif self.BISHOP_BLACK_2.is_selected() is True:
+            self.check_eating(x, y)
             self.BISHOP_BLACK_2.unselect(x, y)
         else:
             counter = 0
             check = False
             for data_white, data_black in zip(self.PAWN_WHITE, self.PAWN_BLACK):
                 if data_white.is_selected() is True:
+                    self.check_eating(x, y)
                     data_white.unselect(x, y)
                     check = True
                     break
                 elif data_black.is_selected() is True:
+                    self.check_eating(x, y)
                     data_black.unselect(x, y)
                     check = True
                     break
@@ -180,6 +188,71 @@ class ChessGame:
         if move is True:
             self.piece_selected = False
         self.moving = move
+
+    def check_eating(self, x, y):
+        if self.QUEEN_BLACK._get_rect().collidepoint(x, y):
+            self.QUEEN_BLACK.set_position(1000, 1000)
+            self.QUEEN_BLACK._set_rect(1000, 1000)
+        elif self.QUEEN_WHITE._get_rect().collidepoint(x, y):
+            self.QUEEN_WHITE.set_position(1000, 1000)
+            self.QUEEN_WHITE._set_rect(1000, 1000)
+        elif self.KING_WHITE._get_rect().collidepoint(x, y):
+            self.KING_WHITE.set_position(1000, 1000)
+            self.KING_WHITE._set_rect(1000, 1000)
+        elif self.KING_BLACK._get_rect().collidepoint(x, y):
+            self.KING_BLACK.set_position(1000, 1000)
+            self.KING_BLACK._set_rect(1000, 1000)
+        elif self.ROOK_WHITE_1._get_rect().collidepoint(x, y):
+            self.ROOK_WHITE_1.set_position(1000, 1000)
+            self.ROOK_WHITE_1._set_rect(1000, 1000)
+        elif self.ROOK_WHITE_2._get_rect().collidepoint(x, y):
+            self.ROOK_WHITE_2.set_position(1000, 1000)
+            self.ROOK_WHITE_2._set_rect(1000, 1000)
+        elif self.ROOK_BLACK_1._get_rect().collidepoint(x, y):
+            self.ROOK_BLACK_1.set_position(1000, 1000)
+            self.ROOK_BLACK_1._set_rect(1000, 1000)
+        elif self.ROOK_BLACK_2._get_rect().collidepoint(x, y):
+            self.ROOK_BLACK_2.set_position(1000, 1000)
+            self.ROOK_BLACK_2._set_rect(1000, 1000)
+        elif self.KNIGHT_WHITE_1._get_rect().collidepoint(x, y):
+            self.KNIGHT_WHITE_1.set_position(1000, 1000)
+            self.KNIGHT_WHITE_1._set_rect(1000, 1000)
+        elif self.KNIGHT_WHITE_2._get_rect().collidepoint(x, y):
+            self.KNIGHT_WHITE_2.set_position(1000, 1000)
+            self.KNIGHT_WHITE_2._set_rect(1000, 1000)
+        elif self.KNIGHT_BLACK_1._get_rect().collidepoint(x, y):
+            self.KNIGHT_BLACK_1.set_position(1000, 1000)
+            self.KNIGHT_BLACK_1._set_rect(1000, 1000)
+        elif self.KNIGHT_BLACK_2._get_rect().collidepoint(x, y):
+            self.KNIGHT_BLACK_2.set_position(1000, 1000)
+            self.KNIGHT_BLACK_2._set_rect(1000, 1000)
+        elif self.BISHOP_WHITE_1._get_rect().collidepoint(x, y):
+            self.BISHOP_WHITE_1.set_position(1000, 1000)
+            self.BISHOP_WHITE_1._set_rect(1000, 1000)
+        elif self.BISHOP_WHITE_2._get_rect().collidepoint(x, y):
+            self.BISHOP_WHITE_2.set_position(1000, 1000)
+            self.BISHOP_WHITE_2._set_rect(1000, 1000)
+        elif self.BISHOP_BLACK_1._get_rect().collidepoint(x, y):
+            self.BISHOP_BLACK_1.set_position(1000, 1000)
+            self.BISHOP_BLACK_1._set_rect(1000, 1000)
+        elif self.BISHOP_BLACK_2._get_rect().collidepoint(x, y):
+            self.BISHOP_BLACK_2.set_position(1000, 1000)
+            self.BISHOP_BLACK_2._set_rect(1000, 1000)
+        else:
+            counter = 0
+            for data_white, data_black in zip(self.PAWN_WHITE, self.PAWN_BLACK):
+                if data_white._get_rect().collidepoint(x, y):
+                    self.PAWN_WHITE[counter].set_position(1000, 1000)
+                    self.PAWN_WHITE[counter]._set_rect(1000, 1000)
+                    break
+                elif data_black._get_rect().collidepoint(x, y):
+                    self.PAWN_BLACK[counter].set_position(1000, 1000)
+                    self.PAWN_BLACK[counter]._set_rect(1000, 1000)
+                    break
+                else:
+                    pass
+                counter = counter + 1
+
 
     # def move_pieces(self, event):
     #     QUEEN_WHITE_RECT, QUEEN_BLACK_RECT = self.QUEEN_WHITE._get_rect(), self.QUEEN_BLACK._get_rect()
@@ -261,7 +334,6 @@ class ChessGame:
         width, height = 8 * self.tile_size, 8 * self.tile_size
         background = pg.Surface((width, height))
 
-
         for y in range(0, height, self.tile_size):
             for x in range(0, width, self.tile_size):
                 rect = (x, y, self.tile_size, self.tile_size)
@@ -271,8 +343,6 @@ class ChessGame:
         clock = pg.time.Clock()
         crashed = False
 
-        QUEEN_WHITE_RECT = self.QUEEN_WHITE._get_rect()
-
         while not crashed:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -280,6 +350,8 @@ class ChessGame:
                 if event.type == pg.MOUSEBUTTONDOWN and self.piece_selected is False:
                     x, y = event.pos
                     self.catch_pieces(x, y)
+                    # print(self.QUEEN_WHITE.is_selected())
+                    # print(self.piece_selected)
                 elif event.type == pg.MOUSEBUTTONDOWN and self.piece_selected is True:
                     x, y = event.pos
                     self.put_pieces(x, y)
@@ -299,9 +371,11 @@ class ChessGame:
         pg.quit()
         quit()
 
+
 def main():
     my_chess = ChessGame()
     my_chess.print_board()
+
 
 if __name__ == '__main__':
     main()
