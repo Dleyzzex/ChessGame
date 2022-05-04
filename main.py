@@ -115,69 +115,73 @@ class ChessGame:
             self.piece_selected = True
         self.moving = move
 
+    def get_pieces_coordinates(self, value):
+        value = int(value / self.tile_size) * self.tile_size
+        return value + 25 # image size / 2
+
     def put_pieces(self, x, y):
         move = True
 
         if self.QUEEN_WHITE.is_selected() is True:
             self.check_eating(x, y)
-            self.QUEEN_WHITE.unselect(x, y)
+            self.QUEEN_WHITE.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.QUEEN_BLACK.is_selected() is True:
             self.check_eating(x, y)
-            self.QUEEN_BLACK.unselect(x, y)
+            self.QUEEN_BLACK.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.KING_WHITE.is_selected() is True:
             self.check_eating(x, y)
-            self.KING_WHITE.unselect(x, y)
+            self.KING_WHITE.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.KING_BLACK.is_selected() is True:
             self.check_eating(x, y)
-            self.KING_BLACK.unselect(x, y)
+            self.KING_BLACK.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.ROOK_WHITE_1.is_selected() is True:
             self.check_eating(x, y)
-            self.ROOK_WHITE_1.unselect(x, y)
+            self.ROOK_WHITE_1.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.ROOK_WHITE_2.is_selected() is True:
             self.check_eating(x, y)
-            self.ROOK_WHITE_2.unselect(x, y)
+            self.ROOK_WHITE_2.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.ROOK_BLACK_1.is_selected() is True:
             self.check_eating(x, y)
-            self.ROOK_BLACK_1.unselect(x, y)
+            self.ROOK_BLACK_1.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.ROOK_BLACK_2.is_selected() is True:
             self.check_eating(x, y)
-            self.ROOK_BLACK_2.unselect(x, y)
+            self.ROOK_BLACK_2.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.KNIGHT_WHITE_1.is_selected() is True:
             self.check_eating(x, y)
-            self.KNIGHT_WHITE_1.unselect(x, y)
+            self.KNIGHT_WHITE_1.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.KNIGHT_WHITE_2.is_selected() is True:
             self.check_eating(x, y)
-            self.KNIGHT_WHITE_2.unselect(x, y)
+            self.KNIGHT_WHITE_2.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.KNIGHT_BLACK_1.is_selected() is True:
             self.check_eating(x, y)
-            self.KNIGHT_BLACK_1.unselect(x, y)
+            self.KNIGHT_BLACK_1.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.KNIGHT_BLACK_2.is_selected() is True:
             self.check_eating(x, y)
-            self.KNIGHT_BLACK_2.unselect(x, y)
+            self.KNIGHT_BLACK_2.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.BISHOP_WHITE_1.is_selected() is True:
             self.check_eating(x, y)
-            self.BISHOP_WHITE_1.unselect(x, y)
+            self.BISHOP_WHITE_1.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.BISHOP_WHITE_2.is_selected() is True:
             self.check_eating(x, y)
-            self.BISHOP_WHITE_2.unselect(x, y)
+            self.BISHOP_WHITE_2.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.BISHOP_BLACK_1.is_selected() is True:
             self.check_eating(x, y)
-            self.BISHOP_BLACK_1.unselect(x, y)
+            self.BISHOP_BLACK_1.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         elif self.BISHOP_BLACK_2.is_selected() is True:
             self.check_eating(x, y)
-            self.BISHOP_BLACK_2.unselect(x, y)
+            self.BISHOP_BLACK_2.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
         else:
             counter = 0
             check = False
             for data_white, data_black in zip(self.PAWN_WHITE, self.PAWN_BLACK):
                 if data_white.is_selected() is True:
                     self.check_eating(x, y)
-                    data_white.unselect(x, y)
+                    data_white.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
                     check = True
                     break
                 elif data_black.is_selected() is True:
                     self.check_eating(x, y)
-                    data_black.unselect(x, y)
+                    data_black.unselect(self.get_pieces_coordinates(x), self.get_pieces_coordinates(y))
                     check = True
                     break
                 else:
