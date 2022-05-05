@@ -13,7 +13,6 @@ class Button:
         self.text = text
 
     def draw(self, win, outline=None):
-        # Call this method to draw the button on the screen
         if outline:
             pg.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
 
@@ -38,55 +37,56 @@ class ChessGame:
         self.display_width = 608
         self.display_height = 608
         self.piece_selected = False
-        self.gameDisplay = pg.display.set_mode((self.display_width, 668))
+        self.gameDisplay = pg.display.set_mode((self.display_width, 820))
         self.image_size = 50
         self.tile_size = 76
         self.brown = (149, 69, 53)
         self.beige = (254, 243, 206)
         self.moving = False
-        self.play_again = Button('red', 200, 608, 200, 60, 'Play Again')
+        self.play_again = Button('red', 200, 760, 200, 60, 'Play Again')
+        self.white_eat, self.black_eat = 0, 0
 
         self.QUEEN_BLACK = pieces.Queen("black", ((self.display_width / 8) * 3 + (self.tile_size - self.image_size) / 2),
-                                        (self.tile_size - self.image_size) / 2)
+                                        (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
         self.QUEEN_WHITE = pieces.Queen("white", ((self.display_width / 8) * 3 + (self.tile_size - self.image_size) / 2),
-                                        ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+                                        ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
         self.KING_BLACK = pieces.King("black", ((self.display_width / 8) * 4 + (self.tile_size - self.image_size) / 2),
-                                        (self.tile_size - self.image_size) / 2)
+                                        (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
         self.KING_WHITE = pieces.King("white", ((self.display_width / 8) * 4 + (self.tile_size - self.image_size) / 2),
-                                        ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+                                        ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
 
-        self.ROOK_BLACK_1 = pieces.Rook("black", ((self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
-        self.ROOK_WHITE_1 = pieces.Rook("white", ((self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+        self.ROOK_BLACK_1 = pieces.Rook("black", ((self.tile_size - self.image_size) / 2), (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
+        self.ROOK_WHITE_1 = pieces.Rook("white", ((self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
         self.ROOK_BLACK_2 = pieces.Rook("black", ((self.display_width / 8) * 7 + (
-                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+                    self.tile_size - self.image_size) / 2), (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
         self.ROOK_WHITE_2 = pieces.Rook("white", ((self.display_width / 8) * 7 + (
-                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
 
         self.KNIGHT_BLACK_1 = pieces.Knight("black", ((self.display_width / 8) + (
-                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+                    self.tile_size - self.image_size) / 2), (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
         self.KNIGHT_WHITE_1 = pieces.Knight("white", ((self.display_width / 8) + (
-                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
         self.KNIGHT_BLACK_2 = pieces.Knight("black", ((self.display_width / 8) * 6 + (
-                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+                    self.tile_size - self.image_size) / 2), (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
         self.KNIGHT_WHITE_2 = pieces.Knight("white", ((self.display_width / 8) * 6 + (
-                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
 
         self.BISHOP_BLACK_1 = pieces.Bishop("black", ((self.display_width / 8) * 2 + (
-                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+                    self.tile_size - self.image_size) / 2), (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
         self.BISHOP_WHITE_1 = pieces.Bishop("white", ((self.display_width / 8) * 2 + (
-                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
         self.BISHOP_BLACK_2 = pieces.Bishop("black", ((self.display_width / 8) * 5 + (
-                    self.tile_size - self.image_size) / 2), (self.tile_size - self.image_size) / 2)
+                    self.tile_size - self.image_size) / 2), (self.display_height / 8) + (self.tile_size - self.image_size) / 2)
         self.BISHOP_WHITE_2 = pieces.Bishop("white", ((self.display_width / 8) * 5 + (
-                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 7 + (self.tile_size - 50) / 2))
+                    self.tile_size - self.image_size) / 2), ((self.display_height / 8) * 8 + (self.tile_size - 50) / 2))
 
         self.PAWN_BLACK, self.PAWN_WHITE = [], []
         for i in range(8):
             self.PAWN_BLACK.append(pieces.Pawn("black", ((self.display_width / 8) * i + (
-                        self.tile_size - self.image_size) / 2), (self.display_height / 8) + (
+                        self.tile_size - self.image_size) / 2), (self.display_height / 8) * 2 + (
                                                       self.tile_size - self.image_size) / 2))
             self.PAWN_WHITE.append(pieces.Pawn("white", ((self.display_width / 8) * i + (
-                        self.tile_size - self.image_size) / 2), (self.display_height / 8) * 6 + (
+                        self.tile_size - self.image_size) / 2), (self.display_height / 8) * 7 + (
                                                       self.tile_size - 50) / 2))
 
     def catch_pieces(self, x, y):
@@ -225,63 +225,81 @@ class ChessGame:
 
     def check_eating(self, x, y):
         if self.QUEEN_BLACK._get_rect().collidepoint(x, y):
-            self.QUEEN_BLACK.set_position(1000, 1000)
-            self.QUEEN_BLACK._set_rect(1000, 1000)
+            self.QUEEN_BLACK.set_position(self.black_eat, 690)
+            self.QUEEN_BLACK._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         elif self.QUEEN_WHITE._get_rect().collidepoint(x, y):
-            self.QUEEN_WHITE.set_position(1000, 1000)
-            self.QUEEN_WHITE._set_rect(1000, 1000)
+            self.QUEEN_WHITE.set_position(self.white_eat, 10)
+            self.QUEEN_WHITE._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.KING_WHITE._get_rect().collidepoint(x, y):
-            self.KING_WHITE.set_position(1000, 1000)
-            self.KING_WHITE._set_rect(1000, 1000)
+            self.KING_WHITE.set_position(self.white_eat, 10)
+            self.KING_WHITE._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.KING_BLACK._get_rect().collidepoint(x, y):
-            self.KING_BLACK.set_position(1000, 1000)
-            self.KING_BLACK._set_rect(1000, 1000)
+            self.KING_BLACK.set_position(self.black_eat, 690)
+            self.KING_BLACK._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         elif self.ROOK_WHITE_1._get_rect().collidepoint(x, y):
-            self.ROOK_WHITE_1.set_position(1000, 1000)
-            self.ROOK_WHITE_1._set_rect(1000, 1000)
+            self.ROOK_WHITE_1.set_position(self.white_eat, 10)
+            self.ROOK_WHITE_1._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.ROOK_WHITE_2._get_rect().collidepoint(x, y):
-            self.ROOK_WHITE_2.set_position(1000, 1000)
-            self.ROOK_WHITE_2._set_rect(1000, 1000)
+            self.ROOK_WHITE_2.set_position(self.white_eat, 10)
+            self.ROOK_WHITE_2._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.ROOK_BLACK_1._get_rect().collidepoint(x, y):
-            self.ROOK_BLACK_1.set_position(1000, 1000)
-            self.ROOK_BLACK_1._set_rect(1000, 1000)
+            self.ROOK_BLACK_1.set_position(self.black_eat, 690)
+            self.ROOK_BLACK_1._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         elif self.ROOK_BLACK_2._get_rect().collidepoint(x, y):
-            self.ROOK_BLACK_2.set_position(1000, 1000)
-            self.ROOK_BLACK_2._set_rect(1000, 1000)
+            self.ROOK_BLACK_2.set_position(self.black_eat, 690)
+            self.ROOK_BLACK_2._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         elif self.KNIGHT_WHITE_1._get_rect().collidepoint(x, y):
-            self.KNIGHT_WHITE_1.set_position(1000, 1000)
-            self.KNIGHT_WHITE_1._set_rect(1000, 1000)
+            self.KNIGHT_WHITE_1.set_position(self.white_eat, 10)
+            self.KNIGHT_WHITE_1._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.KNIGHT_WHITE_2._get_rect().collidepoint(x, y):
-            self.KNIGHT_WHITE_2.set_position(1000, 1000)
-            self.KNIGHT_WHITE_2._set_rect(1000, 1000)
+            self.KNIGHT_WHITE_2.set_position(self.white_eat, 10)
+            self.KNIGHT_WHITE_2._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.KNIGHT_BLACK_1._get_rect().collidepoint(x, y):
-            self.KNIGHT_BLACK_1.set_position(1000, 1000)
-            self.KNIGHT_BLACK_1._set_rect(1000, 1000)
+            self.KNIGHT_BLACK_1.set_position(self.black_eat, 690)
+            self.KNIGHT_BLACK_1._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         elif self.KNIGHT_BLACK_2._get_rect().collidepoint(x, y):
-            self.KNIGHT_BLACK_2.set_position(1000, 1000)
-            self.KNIGHT_BLACK_2._set_rect(1000, 1000)
+            self.KNIGHT_BLACK_2.set_position(self.black_eat, 690)
+            self.KNIGHT_BLACK_2._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         elif self.BISHOP_WHITE_1._get_rect().collidepoint(x, y):
-            self.BISHOP_WHITE_1.set_position(1000, 1000)
-            self.BISHOP_WHITE_1._set_rect(1000, 1000)
+            self.BISHOP_WHITE_1.set_position(self.white_eat, 10)
+            self.BISHOP_WHITE_1._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.BISHOP_WHITE_2._get_rect().collidepoint(x, y):
-            self.BISHOP_WHITE_2.set_position(1000, 1000)
-            self.BISHOP_WHITE_2._set_rect(1000, 1000)
+            self.BISHOP_WHITE_2.set_position(self.white_eat, 10)
+            self.BISHOP_WHITE_2._set_rect(self.white_eat, 10)
+            self.white_eat = self.white_eat + 30
         elif self.BISHOP_BLACK_1._get_rect().collidepoint(x, y):
-            self.BISHOP_BLACK_1.set_position(1000, 1000)
-            self.BISHOP_BLACK_1._set_rect(1000, 1000)
+            self.BISHOP_BLACK_1.set_position(self.black_eat, 690)
+            self.BISHOP_BLACK_1._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         elif self.BISHOP_BLACK_2._get_rect().collidepoint(x, y):
-            self.BISHOP_BLACK_2.set_position(1000, 1000)
-            self.BISHOP_BLACK_2._set_rect(1000, 1000)
+            self.BISHOP_BLACK_2.set_position(self.black_eat, 690)
+            self.BISHOP_BLACK_2._set_rect(self.black_eat, 690)
+            self.black_eat = self.black_eat + 30
         else:
             counter = 0
             for data_white, data_black in zip(self.PAWN_WHITE, self.PAWN_BLACK):
                 if data_white._get_rect().collidepoint(x, y):
-                    self.PAWN_WHITE[counter].set_position(1000, 1000)
-                    self.PAWN_WHITE[counter]._set_rect(1000, 1000)
+                    self.PAWN_WHITE[counter].set_position(self.white_eat, 10)
+                    self.PAWN_WHITE[counter]._set_rect(self.white_eat, 10)
+                    self.white_eat = self.white_eat + 30
                     break
                 elif data_black._get_rect().collidepoint(x, y):
-                    self.PAWN_BLACK[counter].set_position(1000, 1000)
-                    self.PAWN_BLACK[counter]._set_rect(1000, 1000)
+                    self.PAWN_BLACK[counter].set_position(self.black_eat, 690)
+                    self.PAWN_BLACK[counter]._set_rect(self.black_eat, 690)
+                    self.black_eat = self.black_eat + 30
                     break
                 else:
                     pass
@@ -403,8 +421,8 @@ class ChessGame:
                 else:
                     pass
 
-            self.gameDisplay.fill((60, 70, 90))
-            self.gameDisplay.blit(background, (0, 0))
+            self.gameDisplay.fill((255, 255, 255))
+            self.gameDisplay.blit(background, (0, 76))
 
             self.display_pieces()
             self.play_again.draw(self.gameDisplay)
@@ -415,13 +433,13 @@ class ChessGame:
         pg.quit()
         return False
 
-def test():
+def play():
     my_chess = ChessGame()
     return my_chess.print_board()
 
 def main():
     while True:
-        if test() is False:
+        if play() is False:
             break
 
 

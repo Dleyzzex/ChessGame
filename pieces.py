@@ -21,10 +21,6 @@ class Pieces:
         return self._image
 
     def _get_rect(self):
-        # x1, y1 = self.get_position()
-        # x2 = x1 + 50
-        # y2 = y1 + 50
-        # return (x1, y1, x2, y2)
         return self._rect
 
     def _set_rect(self, x, y):
