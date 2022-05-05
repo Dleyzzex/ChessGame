@@ -258,50 +258,52 @@ class ChessGame:
                 counter = counter + 1
 
 
-    # def move_pieces(self, event):
-    #     QUEEN_WHITE_RECT, QUEEN_BLACK_RECT = self.QUEEN_WHITE._get_rect(), self.QUEEN_BLACK._get_rect()
-    #     KING_WHITE_RECT, KING_BLACK_RECT = self.KING_WHITE._get_rect(), self.KING_BLACK._get_rect()
-    #     ROOK1_WHITE_RECT, ROOK2_WHITE_RECT, ROOK1_BLACK_RECT, ROOK2_BLACK_RECT = self.ROOK_WHITE_1._get_rect(), \
-    #                 self.ROOK_WHITE_2._get_rect(), self.ROOK_BLACK_1._get_rect(), self.ROOK_BLACK_2._get_rect()
-    #     KNIGHT1_WHITE_RECT, KNIGHT2_WHITE_RECT, KNIGHT1_BLACK_RECT, KNIGHT2_BLACK_RECT = self.KNIGHT_WHITE_1._get_rect(), \
-    #                 self.KNIGHT_WHITE_2._get_rect(), self.KNIGHT_BLACK_1._get_rect(), self.KNIGHT_BLACK_2._get_rect()
-    #     BISHOP1_WHITE_RECT, BISHOP2_WHITE_RECT, BISHOP1_BLACK_RECT, BISHOP2_BLACK_RECT = self.BISHOP_WHITE_1._get_rect(), \
-    #                 self.BISHOP_WHITE_2._get_rect(), self.BISHOP_BLACK_1._get_rect(), self.BISHOP_BLACK_2._get_rect()
-    #     test = self.QUEEN_WHITE.get_image()
-    #     if self.QUEEN_WHITE.is_selected() is True:
-    #         test.get_rect().move_ip(event.rel)
-    #     elif self.QUEEN_BLACK.is_selected() is True:
-    #         QUEEN_BLACK_RECT.move_ip(event.rel)
-    #     elif self.KING_WHITE.is_selected() is True:
-    #         KING_WHITE_RECT.move_ip(event.rel)
-    #     elif self.KING_BLACK.is_selected() is True:
-    #         KING_BLACK_RECT.move_ip(event.rel)
-    #     # elif self.ROOK_WHITE_1.is_selected() is True:
-    #     #     self.ROOK_WHITE_1.unselect(x, y)
-    #     # elif self.ROOK_WHITE_2.is_selected() is True:
-    #     #     self.ROOK_WHITE_2.unselect(x, y)
-    #     # elif self.ROOK_BLACK_1.is_selected() is True:
-    #     #     self.ROOK_BLACK_1.unselect(x, y)
-    #     # elif self.ROOK_BLACK_2.is_selected() is True:
-    #     #     self.ROOK_BLACK_2.unselect(x, y)
-    #     # elif self.KNIGHT_WHITE_1.is_selected() is True:
-    #     #     self.KNIGHT_WHITE_1.unselect(x, y)
-    #     # elif self.KNIGHT_WHITE_2.is_selected() is True:
-    #     #     self.KNIGHT_WHITE_2.unselect(x, y)
-    #     # elif self.KNIGHT_BLACK_1.is_selected() is True:
-    #     #     self.KNIGHT_BLACK_1.unselect(x, y)
-    #     # elif self.KNIGHT_BLACK_2.is_selected() is True:
-    #     #     self.KNIGHT_BLACK_2.unselect(x, y)
-    #     # elif self.BISHOP_WHITE_1.is_selected() is True:
-    #     #     self.BISHOP_WHITE_1.unselect(x, y)
-    #     # elif self.BISHOP_WHITE_2.is_selected() is True:
-    #     #     self.BISHOP_WHITE_2.unselect(x, y)
-    #     # elif self.BISHOP_BLACK_1.is_selected() is True:
-    #     #     self.BISHOP_BLACK_1.unselect(x, y)
-    #     # elif self.BISHOP_BLACK_2.is_selected() is True:
-    #     #     self.BISHOP_BLACK_2.unselect(x, y)
-    #     else:
-    #         pass
+    def move_pieces(self, x, y):
+
+        if self.QUEEN_WHITE.is_selected() is True:
+            self.QUEEN_WHITE.set_position(x, y)
+        elif self.QUEEN_BLACK.is_selected() is True:
+            self.QUEEN_BLACK.set_position(x, y)
+        elif self.KING_WHITE.is_selected() is True:
+            self.KING_WHITE.set_position(x, y)
+        elif self.KING_BLACK.is_selected() is True:
+            self.KING_BLACK.set_position(x, y)
+        elif self.ROOK_WHITE_1.is_selected() is True:
+            self.ROOK_WHITE_1.set_position(x, y)
+        elif self.ROOK_WHITE_2.is_selected() is True:
+            self.ROOK_WHITE_2.set_position(x, y)
+        elif self.ROOK_BLACK_1.is_selected() is True:
+            self.ROOK_BLACK_1.set_position(x, y)
+        elif self.ROOK_BLACK_2.is_selected() is True:
+            self.ROOK_BLACK_2.set_position(x, y)
+        elif self.KNIGHT_WHITE_1.is_selected() is True:
+            self.KNIGHT_WHITE_1.set_position(x, y)
+        elif self.KNIGHT_WHITE_2.is_selected() is True:
+            self.KNIGHT_WHITE_2.set_position(x, y)
+        elif self.KNIGHT_BLACK_1.is_selected() is True:
+            self.KNIGHT_BLACK_1.set_position(x, y)
+        elif self.KNIGHT_BLACK_2.is_selected() is True:
+            self.KNIGHT_BLACK_2.set_position(x, y)
+        elif self.BISHOP_WHITE_1.is_selected() is True:
+            self.BISHOP_WHITE_1.set_position(x, y)
+        elif self.BISHOP_WHITE_2.is_selected() is True:
+            self.BISHOP_WHITE_2.set_position(x, y)
+        elif self.BISHOP_BLACK_1.is_selected() is True:
+            self.BISHOP_BLACK_1.set_position(x, y)
+        elif self.BISHOP_BLACK_2.is_selected() is True:
+            self.BISHOP_BLACK_2.set_position(x, y)
+        else:
+            counter = 0
+            for data_white, data_black in zip(self.PAWN_WHITE, self.PAWN_BLACK):
+                if data_white.is_selected() is True:
+                    data_white.set_position(x, y)
+                    break
+                elif data_black.is_selected() is True:
+                    data_black.set_position(x, y)
+                    break
+                else:
+                    pass
+                counter = counter + 1
 
     def display_pieces(self):
         # Display pieces
@@ -359,8 +361,8 @@ class ChessGame:
                 elif event.type == pg.MOUSEBUTTONDOWN and self.piece_selected is True:
                     x, y = event.pos
                     self.put_pieces(x, y)
-                # elif event.type == pg.MOUSEMOTION and self.moving:
-                #     self.move_pieces(event)
+                elif event.type == pg.MOUSEMOTION and self.moving:
+                    self.move_pieces(pg.mouse.get_pos()[0], pg.mouse.get_pos()[1])
                 else:
                     pass
 
