@@ -4,12 +4,16 @@ import pygame as pg
 
 
 class Pieces:
-    def __init__(self, chess_color, x, y):
+    def __init__(self, chess_color, Id, x, y):
+        self._id = Id
         self._chess_color = chess_color
         self._image = pygame.Surface((50, 50))
         self._position = (x, y)
         self._selected = False
         self._rect = pg.Rect(x, y, 50, 50)
+
+    def get_id(self):
+        return self._id
 
     def get_color(self):
         return self._chess_color
@@ -44,11 +48,18 @@ class Pieces:
 
     def is_selected(self):
         return self._selected
-
+    
+    def display_piece(self, window, pieces):
+        window.blit(self.get_image(), self.get_position())
+        if (self.is_selected()):
+            self.display_moves(window)
+    
+    def display_moves(self, window):
+        pass
 
 class Pawn(Pieces):
-    def __init__(self, chess_color, x, y):
-        super().__init__(chess_color, x, y)
+    def __init__(self, chess_color, Id, x, y):
+        super().__init__(chess_color, Id, x, y)
         self._type = "Pawn"
         self.set_image(self.piece_image())
 
@@ -58,13 +69,9 @@ class Pawn(Pieces):
         else:
             return pygame.image.load("assets/pawn_white.png").convert_alpha()
 
-    def move(self):
-        print(f"I'm a {self.get_color()} {self._type}")
-
-
 class Knight(Pieces):
-    def __init__(self, chess_color, x, y):
-        super().__init__(chess_color, x, y)
+    def __init__(self, chess_color, Id, x, y):
+        super().__init__(chess_color, Id, x, y)
         self._type = "Knight"
         self.set_image(self.piece_image())
 
@@ -74,13 +81,9 @@ class Knight(Pieces):
         else:
             return pygame.image.load("assets/knight_white.png").convert_alpha()
 
-    def move(self):
-        print(f"I'm a {self.get_color()} {self._type}")
-
-
 class Bishop(Pieces):
-    def __init__(self, chess_color, x, y):
-        super().__init__(chess_color, x, y)
+    def __init__(self, chess_color, Id, x, y):
+        super().__init__(chess_color, Id, x, y)
         self._type = "Bishop"
         self.set_image(self.piece_image())
 
@@ -90,13 +93,9 @@ class Bishop(Pieces):
         else:
             return pygame.image.load("assets/bishop_white.png").convert_alpha()
 
-    def move(self):
-        print(f"I'm a {self.get_color()} {self._type}")
-
-
 class Rook(Pieces):
-    def __init__(self, chess_color, x, y):
-        super().__init__(chess_color, x, y)
+    def __init__(self, chess_color, Id, x, y):
+        super().__init__(chess_color, Id, x, y)
         self._type = "Rook"
         self.set_image(self.piece_image())
 
@@ -106,13 +105,9 @@ class Rook(Pieces):
         else:
             return pygame.image.load("assets/rook_white.png").convert_alpha()
 
-    def move(self):
-        print(f"I'm a {self.get_color()} {self._type}")
-
-
 class Queen(Pieces):
-    def __init__(self, chess_color, x, y):
-        super().__init__(chess_color, x, y)
+    def __init__(self, chess_color, Id, x, y):
+        super().__init__(chess_color, Id, x, y)
         self._type = "Queen"
         self.set_image(self.piece_image())
 
@@ -122,13 +117,9 @@ class Queen(Pieces):
         else:
             return pygame.image.load("assets/queen_white.png").convert_alpha()
 
-    def move(self):
-        print(f"I'm a {self.get_color()} {self._type}")
-
-
 class King(Pieces):
-    def __init__(self, chess_color, x, y):
-        super().__init__(chess_color, x, y)
+    def __init__(self, chess_color, Id, x, y):
+        super().__init__(chess_color, Id, x, y)
         self._type = "King"
         self.set_image(self.piece_image())
 
@@ -137,6 +128,3 @@ class King(Pieces):
             return pygame.image.load("assets/king_black.png").convert_alpha()
         else:
             return pygame.image.load("assets/king_white.png").convert_alpha()
-
-    def move(self):
-        print(f"I'm a {self.get_color()} {self._type}")
