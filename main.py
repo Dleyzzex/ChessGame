@@ -413,9 +413,9 @@ class ChessGame:
                 elif event.type == pg.MOUSEMOTION:
                     pos = pg.mouse.get_pos()
                     if self.play_again.isOver(pos):
-                        self.play_again.color = (0, 255, 0)
+                        self.play_again.color = (149, 69, 53)
                     else:
-                        self.play_again.color = (255, 0, 0)
+                        self.play_again.color = (254, 243, 206)
                     if self.moving:
                         self.move_pieces(pg.mouse.get_pos()[0], pg.mouse.get_pos()[1])
                 else:
