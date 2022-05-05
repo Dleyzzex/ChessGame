@@ -3,18 +3,48 @@ import pygame as pg
 import pieces
 
 
+class Button:
+    def __init__(self, color, x, y, width, height, text=''):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+
+    def draw(self, win, outline=None):
+        # Call this method to draw the button on the screen
+        if outline:
+            pg.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
+
+        pg.draw.rect(win, self.color, (self.x, self.y, self.width, self.height), 0)
+
+        if self.text != '':
+            font = pg.font.SysFont('comicsans', 50)
+            text = font.render(self.text, 1, (0, 0, 0))
+            win.blit(text, (
+            self.x + (self.width / 2 - text.get_width() / 2), self.y + (self.height / 2 - text.get_height() / 2)))
+
+    def isOver(self, pos):
+        if self.x < pos[0] < self.x + self.width:
+            if self.y < pos[1] < self.y + self.height:
+                return True
+        return False
+
+
 class ChessGame:
     def __init__(self):
         pg.init()
         self.display_width = 608
         self.display_height = 608
         self.piece_selected = False
-        self.gameDisplay = pg.display.set_mode((self.display_width, self.display_height))
+        self.gameDisplay = pg.display.set_mode((self.display_width, 668))
         self.image_size = 50
         self.tile_size = 76
         self.brown = (149, 69, 53)
         self.beige = (254, 243, 206)
         self.moving = False
+        self.play_again = Button('red', 200, 608, 200, 60, 'Play Again')
 
         self.QUEEN_BLACK = pieces.Queen("black", ((self.display_width / 8) * 3 + (self.tile_size - self.image_size) / 2),
                                         (self.tile_size - self.image_size) / 2)
@@ -354,15 +384,22 @@ class ChessGame:
                 if event.type == pg.QUIT:
                     crashed = True
                 if event.type == pg.MOUSEBUTTONDOWN and self.piece_selected is False:
+                    pos = pg.mouse.get_pos()
+                    if self.play_again.isOver(pos):
+                        return True
                     x, y = event.pos
                     self.catch_pieces(x, y)
-                    # print(self.QUEEN_WHITE.is_selected())
-                    # print(self.piece_selected)
                 elif event.type == pg.MOUSEBUTTONDOWN and self.piece_selected is True:
                     x, y = event.pos
                     self.put_pieces(x, y)
-                elif event.type == pg.MOUSEMOTION and self.moving:
-                    self.move_pieces(pg.mouse.get_pos()[0], pg.mouse.get_pos()[1])
+                elif event.type == pg.MOUSEMOTION:
+                    pos = pg.mouse.get_pos()
+                    if self.play_again.isOver(pos):
+                        self.play_again.color = (0, 255, 0)
+                    else:
+                        self.play_again.color = (255, 0, 0)
+                    if self.moving:
+                        self.move_pieces(pg.mouse.get_pos()[0], pg.mouse.get_pos()[1])
                 else:
                     pass
 
@@ -370,17 +407,23 @@ class ChessGame:
             self.gameDisplay.blit(background, (0, 0))
 
             self.display_pieces()
+            self.play_again.draw(self.gameDisplay)
 
             pg.display.update()
             clock.tick(60)
 
         pg.quit()
-        quit()
+        return False
 
+def test():
+    my_chess = ChessGame()
+    return my_chess.print_board()
 
 def main():
-    my_chess = ChessGame()
-    my_chess.print_board()
+    while True:
+        if test() is False:
+            break
+
 
 
 if __name__ == '__main__':

@@ -37,12 +37,10 @@ class Pieces:
         self._position = (x, y)
 
     def select(self):
-        print("select")
         print(self._chess_color)
         self._selected = True
 
     def unselect(self, x, y):
-        print("unselect")
         print(self._chess_color)
         self._set_rect(x-15, y-15)
         self.set_position(x-15, y-15)
